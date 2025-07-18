@@ -13,6 +13,7 @@ export const schema = i.schema({
       text: i.string(),
       done: i.boolean(),
       createdAt: i.number(),
+      creatorId: i.string(),
     }),
   },
 })

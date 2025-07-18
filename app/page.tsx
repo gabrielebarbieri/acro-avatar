@@ -5,10 +5,12 @@ import { db, schema } from '@/db/instant'
 
 type Todo = InstaQLEntity<typeof schema, 'todos'>
 
+
+
 function App() {
   // Use Instant's `useQuery()` hook to get the todos
-  const { isLoading, error, data } = db.useQuery({ todos: {} })
 
+  const { isLoading, error, data } = db.useQuery({ todos: {} })
   if (isLoading) {
     return (
       <div className="-mt-16 font-mono min-h-screen flex justify-center items-center flex-col space-y-4">
@@ -42,12 +44,13 @@ function App() {
 
 // Write Data
 // ---------
-function addTodo(text: string) {
+function addTodo(text: string, user: any) {
   db.transact(
     db.tx.todos[id()].update({
       text,
       done: false,
       createdAt: Date.now(),
+      creatorId: user?.id,
     }),
   )
 }
@@ -82,6 +85,7 @@ function ChevronDownIcon() {
 }
 
 function TodoForm({ todos }: { todos: Todo[] }) {
+  const { user } = db.useAuth();
   return (
     <div className="flex items-center h-10 border-b border-gray-300">
       <button
@@ -97,7 +101,7 @@ function TodoForm({ todos }: { todos: Todo[] }) {
         onSubmit={(e) => {
           e.preventDefault()
           const input = e.currentTarget.input as HTMLInputElement
-          addTodo(input.value)
+          addTodo(input.value, user)
           input.value = ''
         }}
       >
