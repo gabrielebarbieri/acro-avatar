@@ -4,6 +4,7 @@ import * as React from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
+import { Badge } from "@/components/ui/badge"
 import {
   Select,
   SelectContent,
@@ -71,14 +72,14 @@ export function Assessment({ defaultScores, onScoresChange }: AssessmentProps) {
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-6">
           <div className="space-y-2">
-            <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-3">Strength</h3>
+            <Badge className="bg-strength text-white border-transparent mb-3">Strength</Badge>
             <div className="space-y-2">
               {skills.strength.map(renderSkillRow)}
             </div>
           </div>
           
           <div className="space-y-2">
-            <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-3">Flexibility</h3>
+            <Badge className="bg-flexibility text-white border-transparent mb-3">Flexibility</Badge>
             <div className="space-y-2">
               {skills.flexibility.map(renderSkillRow)}
             </div>
