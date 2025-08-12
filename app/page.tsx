@@ -1,7 +1,7 @@
 'use client'
 
 import { db } from '@/db/instant'
-import { TodoForm, TodoList, ActionBar } from '@/components/todo'
+import { Assessment } from '@/components/Assessment'
 
 function App() {
   // Use Instant's `useQuery()` hook to get the todos
@@ -9,7 +9,7 @@ function App() {
   
   if (isLoading) {
     return (
-      <div className="-mt-16 font-mono min-h-screen flex justify-center items-center flex-col space-y-4">
+      <div className="-mt-16 min-h-screen flex justify-center items-center flex-col space-y-4">
         Loading...
       </div>
     )
@@ -17,7 +17,7 @@ function App() {
 
   if (error) {
     return (
-      <div className="text-red-500 p-4 -mt-16 font-mono min-h-screen flex justify-center items-center flex-col space-y-4">
+      <div className="text-red-500 p-4 -mt-16 min-h-screen flex justify-center items-center flex-col space-y-4">
         Error: {error.message}
       </div>
     )
@@ -26,14 +26,16 @@ function App() {
   const { todos } = data
 
   return (
-    <div className="-mt-16 font-mono min-h-screen flex justify-center items-center flex-col space-y-4">
-      <h2 className="tracking-wide text-5xl text-gray-300">todos</h2>
-      <div className="border border-gray-300 max-w-xs w-full">
-        <TodoForm todos={todos} />
-        <TodoList todos={todos} />
-        <ActionBar todos={todos} />
+    <div className="min-h-screen bg-background py-8 px-4">
+      <div className="max-w-4xl mx-auto space-y-8">
+        <div className="text-center space-y-4">
+          <h1 className="tracking-wide text-5xl font-extrabold">Acro Avatar</h1>
+          <p className="text-muted-foreground text-lg">
+            Assess your acrobatic skills and track your progress
+          </p>
+        </div>
+        <Assessment />
       </div>
-      <div className="text-xs text-center">Open another tab to see todos update in realtime!</div>
     </div>
   )
 }
