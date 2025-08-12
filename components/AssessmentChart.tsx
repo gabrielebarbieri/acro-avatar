@@ -10,9 +10,6 @@ interface AssessmentScores {
 interface AssessmentChartProps {
   scores: AssessmentScores
   className?: string
-  size?: number
-  strengthColor?: string
-  flexibilityColor?: string
 }
 
 const skills = {
@@ -23,10 +20,10 @@ const skills = {
 export function AssessmentChart({ 
   scores, 
   className, 
-  size = 400,
-  strengthColor = "#ea580c", // Default orange
-  flexibilityColor = "#0891b2" // Default teal
 }: AssessmentChartProps) {
+  const size = 400
+  const strengthColor = "var(--strength)"
+  const flexibilityColor = "var(--flexibility)"
   const hasScores = Object.keys(scores).length > 0
   
   // Chart dimensions - more compact
@@ -155,16 +152,13 @@ export function AssessmentChart({
     return pathData
   }, [scores, hasScores])
   
-  // Data points removed as requested
 
   return (
-    <Card className={className}>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-lg text-center">My Acro Avatar</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <div className={className}>
+        <h2 className="text-xl text-center font-bold leading-none">My Acro Avatar</h2>
+      <div>
         {hasScores ? (
-          <div className="flex flex-col items-center space-y-3 w-full">
+          <div className="flex flex-col items-center w-full">
             <div className="w-full max-w-md aspect-square flex items-center justify-center">
               <svg 
                 width="100%" 
@@ -232,7 +226,7 @@ export function AssessmentChart({
             </div>
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

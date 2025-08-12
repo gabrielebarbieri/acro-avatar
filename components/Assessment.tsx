@@ -21,20 +21,15 @@ const skills = {
 const scoreOptions = Array.from({ length: 19 }, (_, i) => 1 + (i * 0.5))
 
 interface AssessmentProps {
-  onScoresChange?: (scores: Record<string, string>) => void
+  defaultScores: Record<string, string>
+  onScoresChange?: (scores: Record<string, string>) => void 
+  strengthColor?: string
+  flexibilityColor?: string
 }
 
-export function Assessment({ onScoresChange }: AssessmentProps) {
-  const defaultScores = {
-    "Handstand Push-Up": "6.5", 
-    "Arching Squat": "2", 
-    "Handstand": "3.5", 
-    "Front Splits": "3", 
-    "Bridge": "4.5", 
-    "Middle Split": "4" 
-  }
+export function Assessment({ defaultScores, onScoresChange }: AssessmentProps) {
+  
   const [scores, setScores] = React.useState<Record<string, string>>(defaultScores)
-  // onScoresChange?.(defaultScores)
 
   const handleScoreChange = (skill: string, value: string) => {
     const newScores = { ...scores, [skill]: value }

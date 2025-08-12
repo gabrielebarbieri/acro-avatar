@@ -10,7 +10,14 @@ function App() {
   const { isLoading, error, data } = db.useQuery({ todos: {} })
   
   // State to store assessment scores for the radar chart
-  const [assessmentScores, setAssessmentScores] = useState<Record<string, string>>({})
+  const [assessmentScores, setAssessmentScores] = useState<Record<string, string>>({
+    "Handstand Push-Up": "6.5", 
+    "Arching Squat": "2", 
+    "Handstand": "3.5", 
+    "Front Splits": "3", 
+    "Bridge": "4.5", 
+    "Middle Split": "4" 
+  })
   
   if (isLoading) {
     return (
@@ -41,12 +48,9 @@ function App() {
         </div>
         
         <div className="grid lg:grid-cols-2 gap-8 items-start">
-          <Assessment onScoresChange={setAssessmentScores} />
+          <Assessment defaultScores={assessmentScores} onScoresChange={setAssessmentScores} />
           <AssessmentChart 
             scores={assessmentScores} 
-            size={400}
-            strengthColor="#dc2626"
-            flexibilityColor="#059669"
           />
         </div>
       </div>
