@@ -2,10 +2,15 @@
 
 import { db } from '@/db/instant'
 import { Assessment } from '@/components/Assessment'
+import { AssessmentChart } from '@/components/AssessmentChart'
+import { useState } from 'react'
 
 function App() {
   // Use Instant's `useQuery()` hook to get the todos
   const { isLoading, error, data } = db.useQuery({ todos: {} })
+  
+  // State to store assessment scores for the radar chart
+  const [assessmentScores, setAssessmentScores] = useState<Record<string, string>>({})
   
   if (isLoading) {
     return (
@@ -27,14 +32,23 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background py-8 px-4">
-      <div className="max-w-4xl mx-auto space-y-8">
+      <div className="max-w-6xl mx-auto space-y-8">
         <div className="text-center space-y-4">
           <h1 className="tracking-wide text-5xl font-extrabold">Acro Avatar</h1>
           <p className="text-muted-foreground text-lg">
             Assess your acrobatic skills and track your progress
           </p>
         </div>
-        <Assessment />
+        
+        <div className="grid lg:grid-cols-2 gap-8 items-start">
+          <Assessment onScoresChange={setAssessmentScores} />
+          <AssessmentChart 
+            scores={assessmentScores} 
+            size={400}
+            strengthColor="#dc2626"
+            flexibilityColor="#059669"
+          />
+        </div>
       </div>
     </div>
   )
