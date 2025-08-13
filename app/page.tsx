@@ -11,13 +11,50 @@ function App() {
   
   // State to store assessment scores for the radar chart
   const [assessmentScores, setAssessmentScores] = useState<Record<string, string>>({
-    "Handstand Push-Up": "6.5", 
-    "Arching Squat": "2", 
-    "Handstand": "3.5", 
-    "Front Splits": "3", 
-    "Bridge": "4.5", 
-    "Middle Split": "4" 
+    "Handstand Push-Up": "6.5",
+    "Front Splits": "4.5",
+    "Arching Squat": "6.5",
+    "Bridge": "4",
+    "Handstand": "6.5",
+    "Middle Split": "6.5"
   })
+  
+  // Mock historical assessment data
+  const historicalAssessments = [
+    {
+      date: "2024-01-15",
+      scores: {
+        "Handstand Push-Up": "2",
+        "Front Splits": "3",
+        "Arching Squat": "4",
+        "Bridge": "2",
+        "Handstand": "3",
+        "Middle Split": "2"
+      }
+    },
+    {
+      date: "2024-02-15", 
+      scores: {
+        "Handstand Push-Up": "2.5",
+        "Front Splits": "4",
+        "Arching Squat": "5",
+        "Bridge": "3",
+        "Handstand": "3.5",
+        "Middle Split": "3"
+      }
+    },
+    {
+      date: "2024-03-15",
+      scores: {
+        "Handstand Push-Up": "3",
+        "Front Splits": "4.5",
+        "Arching Squat": "6",
+        "Bridge": "4",
+        "Handstand": "4",
+        "Middle Split": "3.5"
+      }
+    }
+  ]
   
   if (isLoading) {
     return (
@@ -50,7 +87,8 @@ function App() {
         <div className="grid lg:grid-cols-2 gap-8 items-start">
           <Assessment defaultScores={assessmentScores} onScoresChange={setAssessmentScores} />
           <AssessmentChart 
-            scores={assessmentScores} 
+            scores={assessmentScores}
+            historicalData={historicalAssessments}
           />
         </div>
       </div>

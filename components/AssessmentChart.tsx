@@ -7,8 +7,14 @@ interface AssessmentScores {
   [key: string]: string
 }
 
+interface HistoricalAssessment {
+  date: string
+  scores: AssessmentScores
+}
+
 interface AssessmentChartProps {
   scores: AssessmentScores
+  historicalData?: HistoricalAssessment[]
   className?: string
 }
 
@@ -19,6 +25,7 @@ const skills = {
 
 export function AssessmentChart({ 
   scores, 
+  historicalData = [],
   className, 
 }: AssessmentChartProps) {
   const size = 400
@@ -152,6 +159,48 @@ export function AssessmentChart({
     return pathData
   }, [scores, hasScores])
   
+  // Generate historical radar paths for both strength and flexibility
+  const historicalPaths = React.useMemo(() => {
+    const totalAssessments = historicalData.length 
+    return historicalData.map((assessment, assessmentIndex) => {
+      const strengthPoints = skills.strength.map((skill) => {
+        const score = assessment.scores[skill] ? parseFloat(assessment.scores[skill]) : 0
+        const skillIndex = allSkills.indexOf(skill)
+        const angle = skillIndex * angleStep
+        const radius = (score / 10) * maxRadius
+        return polarToCartesian(angle, radius)
+      })
+      
+      const flexibilityPoints = skills.flexibility.map((skill) => {
+        const score = assessment.scores[skill] ? parseFloat(assessment.scores[skill]) : 0
+        const skillIndex = allSkills.indexOf(skill)
+        const angle = skillIndex * angleStep
+        const radius = (score / 10) * maxRadius
+        return polarToCartesian(angle, radius)
+      })
+      
+      const strengthPath = strengthPoints.length > 0 
+        ? strengthPoints.reduce((path, point, index) => {
+            return path + (index === 0 ? `M ${point.x} ${point.y}` : ` L ${point.x} ${point.y}`)
+          }, "") + " Z"
+        : ""
+        
+      const flexibilityPath = flexibilityPoints.length > 0
+        ? flexibilityPoints.reduce((path, point, index) => {
+            return path + (index === 0 ? `M ${point.x} ${point.y}` : ` L ${point.x} ${point.y}`)
+          }, "") + " Z"
+        : ""
+      
+      const normalizedIndex = (assessmentIndex + 1) / totalAssessments
+      const opacity = 0.33 * normalizedIndex * normalizedIndex
+      return {
+        strengthPath,
+        flexibilityPath,
+        date: assessment.date,
+        opacity: opacity
+      }
+    })
+  }, [historicalData])
 
   return (
     <div className={className}>
@@ -173,24 +222,51 @@ export function AssessmentChart({
                   {/* Axis lines and labels */}
                   {axes}
                   
-                  {/* Strength radar area */}
+                  {/* Historical data (rendered behind current data) */}
+                  {historicalPaths.map((historical, index) => (
+                    <g key={`historical-${index}`}>
+                      {/* Historical strength radar area */}
+                      {historical.strengthPath && (
+                        <path
+                          d={historical.strengthPath}
+                          fill="none"
+                          stroke={strengthColor}
+                          strokeWidth="3"
+                          strokeOpacity={historical.opacity}
+                          strokeLinejoin="round"
+                        />
+                      )}
+                      
+                      {/* Historical flexibility radar area */}
+                      {historical.flexibilityPath && (
+                        <path
+                          d={historical.flexibilityPath}
+                          fill="none"
+                          stroke={flexibilityColor}
+                          strokeWidth="3"
+                          strokeOpacity={historical.opacity}
+                          strokeLinejoin="round"
+                        />
+                      )}
+                    </g>
+                  ))}
+                  
+                  {/* Current Strength radar area */}
                   {strengthPath && (
                     <path
                       d={strengthPath}
-                      fill={strengthColor}
-                      fillOpacity="0.25"
+                      fill="none"
                       stroke={strengthColor}
                       strokeWidth="3"
                       strokeLinejoin="round"
                     />
                   )}
                   
-                  {/* Flexibility radar area */}
+                  {/* Current Flexibility radar area */}
                   {flexibilityPath && (
                     <path
                       d={flexibilityPath}
-                      fill={flexibilityColor}
-                      fillOpacity="0.25"
+                      fill="none"
                       stroke={flexibilityColor}
                       strokeWidth="3"
                       strokeLinejoin="round"
